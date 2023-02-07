@@ -20,14 +20,14 @@ func GetType(path string) Type {
 	return 0
 }
 
-func IsExistingFile(t Type) bool {
+func (t Type) IsExistingFile() bool {
 	return t&NotExist == 0 && t&Dir == 0
 }
 
-func IsDir(t Type) bool {
+func (t Type) IsDir() bool {
 	return t&Dir == Dir
 }
 
-func IsNotExisting(t Type) bool {
+func (t Type) IsNotExisting() bool {
 	return t&NotExist == NotExist
 }

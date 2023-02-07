@@ -30,7 +30,7 @@ func TestGetType(t *testing.T) {
 
 func TestIsExistingFile(t *testing.T) {
 	path := "test_file"
-	exists := IsExistingFile(GetType(path))
+	exists := GetType(path).IsExistingFile()
 	if !exists {
 		t.Fatal()
 	}

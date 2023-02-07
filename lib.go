@@ -1,4 +1,4 @@
-package filepath
+package fpath
 
 import "os"
 

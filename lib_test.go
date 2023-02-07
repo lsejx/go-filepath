@@ -15,9 +15,9 @@ func TestGetType(t *testing.T) {
 	// before start testing
 
 	testDatas := []data{
-		{"not_existing_file", NotFound},
+		{"not_existing_file", NotExist},
 		{"test_file", 0},
-		{"test_dir", Directory},
+		{"test_dir", Dir},
 	}
 
 	for _, data := range testDatas {

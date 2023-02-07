@@ -23,3 +23,7 @@ func GetType(path string) Type {
 func IsExistingFile(t Type) bool {
 	return t&NotFound == 0 && t&Directory == 0
 }
+
+func IsNotExistingFile(t Type) bool {
+	return t&NotFound == NotFound && t&Directory == 0
+}

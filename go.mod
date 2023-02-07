@@ -1,3 +1,3 @@
-module check_file_path
+module filepath
 
 go 1.20

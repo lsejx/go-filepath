@@ -5,23 +5,25 @@ import "os"
 type Type int
 
 const (
-	NotExist Type = 1 << iota
-	Dir      Type = 1 << iota
+	Present Type = 1 << iota
+	Dir     Type = 1 << iota
 )
 
 func GetType(path string) Type {
+	flag := Type(0)
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		return NotExist
+		return 0
 	}
+	flag |= Present
 	if info.IsDir() {
-		return Dir
+		flag |= Dir
 	}
-	return 0
+	return flag
 }
 
-func (t Type) IsExistingFile() bool {
-	return t&NotExist == 0 && t&Dir == 0
+func (t Type) IsFile() bool {
+	return t == Present
 }
 
 func (t Type) IsDir() bool {
@@ -29,5 +31,5 @@ func (t Type) IsDir() bool {
 }
 
 func (t Type) IsNotExisting() bool {
-	return t&NotExist == NotExist
+	return t == 0
 }

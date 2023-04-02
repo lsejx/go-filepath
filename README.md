@@ -1,7 +1,7 @@
 # go-filepath
-* only unix-like system is supported now
-* resolve filepath which is used on shell commonly but doesn't work correctly on some functions (e.g. os.OpenFile)
-* easily check whether a file is existing, whether it's a directory
+* only unix-like system is supported now.
+* resolve filepath which is used on shell commonly but doesn't work correctly on some functions (e.g. os.OpenFile).
+* easily check whether a file is existing, whether it's a directory.
 
 <br>
 

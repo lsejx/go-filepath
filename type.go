@@ -31,6 +31,10 @@ func (t Type) IsDir() bool {
 	return t&Dir == Dir
 }
 
+func (t Type) IsExisting() bool {
+	return t&Present == Present
+}
+
 func (t Type) IsNotExisting() bool {
 	return t == Absent
 }

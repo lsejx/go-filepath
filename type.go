@@ -5,6 +5,7 @@ import "os"
 type Type int
 
 const (
+	Absent  Type = 0
 	Present Type = 1 << iota
 	Dir     Type = 1 << iota
 )
@@ -13,7 +14,7 @@ func GetType(path string) Type {
 	flag := Type(0)
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		return 0
+		return Absent
 	}
 	flag |= Present
 	if info.IsDir() {
@@ -31,5 +32,5 @@ func (t Type) IsDir() bool {
 }
 
 func (t Type) IsNotExisting() bool {
-	return t == 0
+	return t == Absent
 }

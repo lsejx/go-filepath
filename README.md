@@ -1,12 +1,13 @@
 # go-filepath
-* only unix-like system is supported now.
 * resolve filepath which is used on shell commonly but doesn't work correctly on some functions (e.g. os.OpenFile).
 * easily check whether a file is existing, whether it's a directory.
+<br><br>
 
-<br>
+# Import
+	import "github.com/lsejx/go-filepath"
 
-# examples
-### resolve filepath
+# Examples
+### resolve filepath (only unix-like system)
 	path1 := "$GOPATH/bin"
 	resolvedPath1, err := fpath.ResolveEnv(path1)
 	// handle err

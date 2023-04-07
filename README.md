@@ -5,6 +5,7 @@
 
 # Import
 	import "github.com/lsejx/go-filepath"
+<br><br>
 
 # Examples
 ### resolve filepath (only unix-like system)

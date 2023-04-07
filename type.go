@@ -2,39 +2,36 @@ package fpath
 
 import "os"
 
-type Type int
-
-const (
-	Absent  Type = 0
-	Present Type = 1 << iota
-	Dir     Type = 1 << iota
-)
+type Type struct {
+	isExisting bool
+	isDir      bool
+}
 
 func GetType(path string) Type {
-	flag := Type(0)
+	tp := Type{false, false}
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		return Absent
+		return tp
 	}
-	flag |= Present
+	tp.isExisting = true
 	if info.IsDir() {
-		flag |= Dir
+		tp.isDir = true
 	}
-	return flag
+	return tp
 }
 
 func (t Type) IsFile() bool {
-	return t == Present
+	return t.isExisting && !t.isDir
 }
 
 func (t Type) IsDir() bool {
-	return t&Dir == Dir
+	return t.isDir
 }
 
 func (t Type) IsExisting() bool {
-	return t&Present == Present
+	return t.isExisting
 }
 
 func (t Type) IsNotExisting() bool {
-	return t == Absent
+	return !t.isExisting
 }

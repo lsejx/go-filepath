@@ -20,18 +20,24 @@ func GetType(path string) Type {
 	return tp
 }
 
+// IsFile returns true if the file is existing and it isn't a directory.
+// If it isn't existing, this returns false.
 func (t Type) IsFile() bool {
 	return t.isExisting && !t.isDir
 }
 
+// IsDir returns true if the file is existing and it isn't a directory.
+// If it isn't existing, this returns false.
 func (t Type) IsDir() bool {
 	return t.isDir
 }
 
+// IsExisting returns true if the file is existing, despite whether it is a directory.
 func (t Type) IsExisting() bool {
 	return t.isExisting
 }
 
+// IsNotExisting returns just NOT of IsExisting.
 func (t Type) IsNotExisting() bool {
 	return !t.isExisting
 }

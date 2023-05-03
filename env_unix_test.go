@@ -1,95 +1,96 @@
 package fpath
 
 import (
+	"errors"
 	"testing"
 )
 
 func TestResolveEnv(t *testing.T) {
-	okDatas := []struct {
-		in   string
-		want string
-	}{
-		{"", ""},
-		{"aiueo/kakikukeko", "aiueo/kakikukeko"},
-		{"$GOPATH", "/go"},
-		{"$GOPATH/bin", "/go/bin"},
-		{"aiueo$GOPATH", "aiueo/go"},
-		{"aiueo$GOPATH/kakikukeko", "aiueo/go/kakikukeko"},
-		{"$GOPATH$GOPATH", "/go/go"},
-	}
-
-	// frequently used
 	e0 := "$XXX is absent"
-	badDatas := []struct {
-		in      string
-		wantErr string
+	tests := []struct {
+		arg string
+		ret string
+		err error
 	}{
-		{"$XXX", e0},
-		{"$XXX/bin", e0},
-		{"/aiueo/$XXX", e0},
-		{"/aiueo/$XXX/kakikukeko", e0},
-		{"$XXX/$YYY", e0},
-		{"$#/$XXX", "$# is absent"},
-		{"$$", "$$ is absent"},
+		{"", "", nil},
+		{"aiueo/kakikukeko", "aiueo/kakikukeko", nil},
+		{"$GOPATH", "/go", nil},
+		{"$GOPATH/bin", "/go/bin", nil},
+		{"aiueo$GOPATH", "aiueo/go", nil},
+		{"aiueo$GOPATH/kakikukeko", "aiueo/go/kakikukeko", nil},
+		{"$GOPATH$GOPATH", "/go/go", nil},
+		{"$XXX", "", errors.New(e0)},
+		{"$XXX/bin", "", errors.New(e0)},
+		{"/aiueo/$XXX", "", errors.New(e0)},
+		{"/aiueo/$XXX/kakikukeko", "", errors.New(e0)},
+		{"$XXX/$YYY", "", errors.New(e0)},
+		{"$#/$XXX", "", errors.New("$# is absent")},
+		{"$$", "", errors.New("$$ is absent")},
 	}
 
-	for _, okData := range okDatas {
-		got, err := ResolveEnv(okData.in)
-		if err != nil {
-			t.Fatalf("err:%v, in:%q", err, okData.in)
-		}
-		if okData.want != got {
-			t.Fatalf("in:%q, got:%q", okData.in, got)
-		}
-	}
-
-	for _, badData := range badDatas {
-		got, err := ResolveEnv(badData.in)
-		if err == nil {
-			t.Fatalf("nil err, in %q, got:%q", badData.in, got)
-		}
-		if badData.wantErr != err.Error() {
-			t.Fatalf("wantErr:%v, err:%v", badData.wantErr, err)
+	for _, tt := range tests {
+		s, err := ResolveEnv(tt.arg)
+		if tt.err == nil {
+			if err != nil {
+				t.Fatalf("a:%v, err:%v", tt.arg, err)
+			}
+			// ok
+		} else {
+			// non-nil-err case
+			if err == nil {
+				t.Fatalf("a:%v, nilerr, s:%v", tt.arg, s)
+			}
+			if tt.err.Error() != err.Error() {
+				t.Fatalf("a:%v, err:%v, w:%v", tt.arg, err, tt.err)
+			}
 		}
 	}
 }
 
 func TestResolveShellEnv(t *testing.T) {
-	okDatas := []struct {
-		in   string
-		want string
+	tests := []struct {
+		arg string
+		ret string
+		err error
 	}{
-		{"", ""},
-		{"aiueo/kakikukeko", "aiueo/kakikukeko"},
-		{"$GOPATH", "/go"},
-		{"$GOPATH/bin", "/go/bin"},
-		{"aiueo$GOPATH", "aiueo/go"},
-		{"aiueo$GOPATH/kakikukeko", "aiueo/go/kakikukeko"},
-		{"$GOPATH$GOPATH", "/go/go"},
+		{"", "", nil},
+		{"aiueo/kakikukeko", "aiueo/kakikukeko", nil},
+		{"$GOPATH", "/go", nil},
+		{"$GOPATH/bin", "/go/bin", nil},
+		{"aiueo$GOPATH", "aiueo/go", nil},
+		{"aiueo$GOPATH/kakikukeko", "aiueo/go/kakikukeko", nil},
+		{"$GOPATH$GOPATH", "/go/go", nil},
 	}
 
-	for _, okData := range okDatas {
-		got, err := ResolveShellEnv(okData.in)
-		if err != nil {
-			t.Fatalf("err:%v, in:%q", err, okData.in)
-		}
-		if okData.want != got {
-			t.Fatalf("in:%q, got:%q", okData.in, got)
+	for _, tt := range tests {
+		s, err := ResolveShellEnv(tt.arg)
+		if tt.err == nil {
+			if err != nil {
+				t.Fatalf("a:%v, err:%v", tt.arg, err)
+			}
+			// ok
+		} else {
+			if err == nil {
+				t.Fatalf("a:%v, nilerr, s:%v", tt.arg, s)
+			}
+			if tt.err.Error() != err.Error() {
+				t.Fatalf("a:%v, err:%v, w:%v", tt.arg, err, tt.err)
+			}
 		}
 	}
 
-	datas := []string{
+	tests2 := []string{
 		"$$",
 		"$?",
 		"~",
 		"~/aiueo",
 	}
 
-	for _, data := range datas {
-		got, err := ResolveShellEnv(data)
+	for _, tt := range tests2 {
+		s, err := ResolveShellEnv(tt)
 		if err != nil {
-			t.Fatalf("err:%v, in:%q", err, data)
+			t.Fatalf("err:%v, a:%q", err, tt)
 		}
-		t.Logf("in:%q, got:%q", data, got)
+		t.Logf("a:%q, s:%q", tt, s)
 	}
 }

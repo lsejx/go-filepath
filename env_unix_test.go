@@ -60,6 +60,8 @@ func TestResolveShellEnv(t *testing.T) {
 		{"aiueo$GOPATH", "aiueo/go", nil},
 		{"aiueo$GOPATH/kakikukeko", "aiueo/go/kakikukeko", nil},
 		{"$GOPATH$GOPATH", "/go/go", nil},
+		{"~", "/root", nil},
+		{"~/aiueo", "/root/aiueo", nil},
 	}
 
 	for _, tt := range tests {
@@ -82,8 +84,6 @@ func TestResolveShellEnv(t *testing.T) {
 	tests2 := []string{
 		"$$",
 		"$?",
-		"~",
-		"~/aiueo",
 	}
 
 	for _, tt := range tests2 {

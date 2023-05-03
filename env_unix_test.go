@@ -34,7 +34,9 @@ func TestResolveEnv(t *testing.T) {
 			if err != nil {
 				t.Fatalf("a:%v, err:%v", tt.arg, err)
 			}
-			// ok
+			if s != tt.ret {
+				t.Fatalf("a:%v, s:%v, w:%v", tt.arg, s, tt.ret)
+			}
 		} else {
 			// non-nil-err case
 			if err == nil {
@@ -70,7 +72,9 @@ func TestResolveShellEnv(t *testing.T) {
 			if err != nil {
 				t.Fatalf("a:%v, err:%v", tt.arg, err)
 			}
-			// ok
+			if s != tt.ret {
+				t.Fatalf("a:%v, s:%v, w:%v", tt.arg, s, tt.ret)
+			}
 		} else {
 			if err == nil {
 				t.Fatalf("a:%v, nilerr, s:%v", tt.arg, s)

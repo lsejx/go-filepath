@@ -1,28 +1,23 @@
 # go-filepath
-* resolve filepath which is used on shell commonly but doesn't work correctly on some functions (e.g. os.OpenFile).
-* easily check whether a file is existing, whether it's a directory.
+* easily check whether a file is existing, whether it's a directory, etc. This is like a shortcut of "os" and "io/fs" in standard library.
 <br><br>
 
 # Import
 	import "github.com/lsejx/go-filepath"
 <br><br>
 
-# Examples
-### resolve filepath (only unix-like system)
-	path1 := "$GOPATH/bin"
-	resolvedPath1, err := fpath.ResolveEnv(path1)
-	// handle err
-	// resolvedPath1 == "/go/bin"
-
-	path2 := "~/.bashrc"
-	resolvedPath2, err := fpath.AbsHome(path2)
-	// handle err
-	// resolvedPath2 == "/root/.bashrc"
+# Example
 
 ### check filepath
 	path := "/"
 	t := fpath.GetType(path)
-	t.IsFile()        // false
-	t.IsDir()         // true
 	t.IsExisting()    // true
 	t.IsNotExisting() // false
+	t.IsRegularFile() // false
+	t.IsDir()         // true
+	t.IsSymlink()     // false
+	t.IsDevice()      // false
+	t.IsCharDevice()  // false
+	t.IsPipe()        // false
+	t.IsSocket()      // false
+	t.IsIrregular()   // false

@@ -12,7 +12,7 @@ type Type struct {
 
 func GetType(path string) Type {
 	tp := Type{isExisting: false}
-	info, err := os.Stat(path)
+	info, err := os.Lstat(path)
 	if os.IsNotExist(err) {
 		return tp
 	}
@@ -36,6 +36,9 @@ func (t Type) IsNotExisting() bool {
 // If it's a special file like device, pipe, symlink, socket, etc, this returns false.
 // This is based on io/fs.FileMode.
 func (t Type) IsRegularFile() bool {
+	if !t.isExisting {
+		return false
+	}
 	return t.mode.IsRegular()
 }
 

@@ -7,6 +7,7 @@ import (
 func TestType(t *testing.T) {
 	tests := []struct {
 		path string
+		err  bool
 		exi  bool
 		reg  bool
 		dir  bool
@@ -17,16 +18,23 @@ func TestType(t *testing.T) {
 		soc  bool
 		irr  bool
 	}{
-		{"./test/______", false, false, false, false, false, false, false, false, false},
-		{"./test/regular", true, true, false, false, false, false, false, false, false},
-		{"./test/", true, false, true, false, false, false, false, false, false},
-		{"./test/slink", true, false, false, true, false, false, false, false, false},
-		{"/dev/null", true, false, false, false, true, true, false, false, false},
-		{"./test/pipe", true, false, false, false, false, false, true, false, false},
+		{"./test/______", false, false, false, false, false, false, false, false, false, false},
+		{"./test/regular", false, true, true, false, false, false, false, false, false, false},
+		{"./test/", false, true, false, true, false, false, false, false, false, false},
+		{"./test/slink", false, true, false, false, true, false, false, false, false, false},
+		{"/dev/null", false, true, false, false, false, true, true, false, false, false},
+		{"./test/pipe", false, true, false, false, false, false, false, true, false, false},
 	}
 
 	for _, tt := range tests {
-		tp := GetType(tt.path)
+		tp, err := GetType(tt.path)
+		if !tt.err {
+			if err != nil {
+				t.Fatal(tt.path, err)
+			}
+		} else {
+			t.Log(tt.path, "err==true", err)
+		}
 		switch {
 		case tp.IsExisting() != tt.exi:
 			t.Fatal(tt.path, "exi")

@@ -10,15 +10,18 @@ type Type struct {
 	mode       fs.FileMode
 }
 
-func GetType(path string) Type {
+func GetType(path string) (Type, error) {
 	tp := Type{isExisting: false}
 	info, err := os.Lstat(path)
-	if os.IsNotExist(err) {
-		return tp
+	if err != nil {
+		if os.IsNotExist(err) {
+			return tp, nil
+		}
+		return Type{}, err
 	}
 	tp.isExisting = true
 	tp.mode = info.Mode()
-	return tp
+	return tp, nil
 }
 
 // IsExisting returns true on existing path despite whether it is a regular file, directory or special file.

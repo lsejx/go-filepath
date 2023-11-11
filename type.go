@@ -10,6 +10,8 @@ type Type struct {
 	mode       fs.FileMode
 }
 
+// GetType checks the filepath and returns struct that contains the result of checking.
+// If os.Lstat returns non-nil error, GetType returns it.
 func GetType(path string) (Type, error) {
 	tp := Type{isExisting: false}
 	info, err := os.Lstat(path)

@@ -10,7 +10,7 @@
 
 ### check filepath
 	path := "/"
-	t := fpath.GetType(path)
+	t, err := fpath.GetType(path)
 	t.IsExisting()    // true
 	t.IsNotExisting() // false
 	t.IsRegularFile() // false
